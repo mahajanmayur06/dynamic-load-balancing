@@ -1,0 +1,2 @@
+.\.venv\Scripts\Activate # for powershell
+source .venv/Scripts/activate # for git bash

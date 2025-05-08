@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  app1:
+    build: .
+    environment:
+      - APP_Name=app1
+    expose:
+      - "8000"
+    networks:
+      - webnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]  # Example health check
+      interval: 30s
+      retries: 3
+
+  app2:
+    build: .
+    environment:
+      - APP_Name=app2
+    expose:
+      - "8000"
+    networks:
+      - webnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      retries: 3
+
+  app3:
+    build: .
+    environment:
+      - APP_Name=app3
+    expose:
+      - "8000"
+    networks:
+      - webnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      retries: 3
+
+  haproxy:
+    image: haproxy:2.8
+    ports:
+      - "8500:8500"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    networks:
+      - webnet
+    depends_on:
+      - app1
+      - app2
+      - app3
+
+networks:
+  webnet:
